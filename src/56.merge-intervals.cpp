@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <algorithm>
 using namespace std;
 
 /*
@@ -35,6 +36,7 @@ private:
                     else if ((*itleft)[0] <= (*it)[0] && (*itleft)[1] >= (*it)[0])
                     {
                         (*it)[0] = (*itleft)[0];
+                        srcvv.erase(itleft);
                         break;
                     }
                     else if ((*itleft)[0] > (*it)[0])
@@ -56,6 +58,7 @@ private:
                     else if ((*itright)[0] <= (*it)[1] && (*itright)[1] >= (*it)[1])
                     {
                         (*it)[1] = (*itright)[1];
+                        srcvv.erase(itright);
                         break;
                     }
                     else if ((*itright)[1] < (*it)[1])
@@ -77,7 +80,8 @@ private:
     }
 
 public:
-    vector<vector<int> > merge(vector<vector<int> >& intervals) {
+
+    vector<vector<int> > merge1(vector<vector<int> >& intervals) {
         vector<vector<int> > vv;
         int size = intervals.size();
         if (size == 0)
@@ -91,7 +95,51 @@ public:
         }
         return vv;
     }
+
+    vector<vector<int> > merge2(vector<vector<int> >& intervals) 
+    {
+        vector<vector<int> > vv;
+        int size = intervals.size();
+        if (size == 0)
+            return vv;
+        sort(intervals.begin(), intervals.end(), [](vector<int> a, vector<int> b) { return a[0] < b[0]; });
+        vv.push_back(intervals[0]);
+        if (size == 1)
+            return vv;
+        for (int i = 1; i < size; i++)
+        {
+            if (intervals[i][0] <= vv.back()[1])
+                vv.back()[1] = max(vv.back()[1], intervals[i][1]);
+            else
+                vv.push_back(intervals[i]);
+        }
+        return vv;
+    }
+
+    
 };
+
+void print_vv(vector<vector<int> > vv)
+{
+    cout << "[ ";
+    for (size_t i = 0; i < vv.size(); i++)
+    {
+        cout << "[";
+        for (size_t k = 0; k < vv[i].size(); k++)
+        {
+            if (k != vv[i].size() - 1)
+                cout << vv[i][k] << ", ";
+            else
+                cout << vv[i][k];
+            
+        }
+        if (i != vv.size() - 1)
+            cout << "], ";
+        else
+           cout << "]";
+    }
+    cout << " ]" << endl;
+}
 
 int main(void)
 {
@@ -160,14 +208,8 @@ int main(void)
     // vv.push_back(v12);
 
     Solution s;
-    vector<vector<int> > ret = s.merge(vv);
-    for (size_t i = 0; i < ret.size(); i++)
-    {
-        for (size_t k = 0; k < ret[i].size(); k++)
-        {
-            cout << ret[i][k] << " ";
-        }
-        cout << endl;
-    }
+    vector<vector<int> > ret = s.merge1(vv);
+    print_vv(vv);
+    print_vv(ret);
     return 0;
 }
