@@ -13,7 +13,6 @@ class Solution {
 private:
     bool check(vector<vector<int> > visited, vector<vector<char> >& board, string word, int i, int j, int m, int n, int idx)
     {
-        // cout << "i=" << i << " j=" << j << " baord[i][j]=" << board[i][j] << " (idx - 1)=" << idx - 1 << " word[idx - 1]=" << word.at(idx - 1) << endl;
         if (idx == word.size())
             return true;
         bool up = false, down = false, left = false, right = false;
@@ -67,17 +66,44 @@ private:
         }
         return false;
     }
-    ing &word, int i, int j, int pos) {
-10
-​
-11
-        if (pos == word.size()) return true;
-12
-        if (i < 0 || i >= board.size() || j < 0 || j >= board[0].size()) return false;
-13
+    bool search(vector<vector<char>>& board, string &word, int i, int j, int pos) {
+        if (pos == word.size())
+            return true;
+        if (i < 0 || i >= board.size() || j < 0 || j >= board[0].size())
+            return false;
         bool ans = false;
+        if (board[i][j] == word[pos])
+        {
+            char t = board[i][j];
+            board[i][j] = '\0';
+            ans = search(board, word, i + 1, j, pos + 1) ||
+                  search(board, word, i, j + 1, pos + 1) ||
+                  search(board, word, i - 1, j, pos + 1) ||
+                  search(board, word, i, j - 1, pos + 1);
+            board[i][j] = t;
+        }
+        return ans;
+    }
 
 public:
+    bool exist(vector<vector<char>>& board, string word) {
+        int row = board.size();
+        if (row == 0)
+            return false;
+        int col = board[0].size();
+        if (col == 0)
+            return false;
+        if (word.size() == 0)
+            return true;
+
+        for (int i = 0; i < row; ++i)
+            for (int j = 0; j < col; ++j) {
+                if(search(board, word, i, j, 0))
+                    return true;
+            }
+        return false;
+    }
+
     bool exist2(vector<vector<char> > &board, string word)
     {
         if (board.size() == 0)
@@ -85,19 +111,10 @@ public:
         if (board[0].size() == 0)
             return false;
         if (word.size() == 0)
-            return false;
+            return true;
 
         int m = board.size(), n = board[0].size(), len = word.size();
-        vector<vector<int> > visited;
-        for (int i = 0; i < m; i++)
-        {
-            vector<int> tmp;
-            for (int j = 0; j < n; j++)
-            {
-                tmp.push_back(0);
-            }
-            visited.push_back(tmp);
-        }
+        vector<vector<int> > visited(m, vector<int>(n, 0));
         for (int i = 0; i < m; i++)
         {
             for (int j = 0; j < n; j++)
