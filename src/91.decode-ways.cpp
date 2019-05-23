@@ -73,7 +73,7 @@ int main(void)
     string a = "4757562545844617494555774581341211511296816786586787755257741178599337186486723247528324612117156948";
     Solution s;
     int ret2 = s.numDecodings2(a);
-    int ret1 = s.numDecodings(a);
+    int ret1 = s.numDecodings1(a);
     cout << "right answer:" << ret2 << endl;
     cout << "test answer :" << ret1 << endl;
     return 0;
