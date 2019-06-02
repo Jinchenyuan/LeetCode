@@ -12,7 +12,7 @@ private:
     {
         if (start == end)
             return -1;
-        vector<int> container;
+        int tmp = 0;
         int hight = 0;
         int hidx = -1;
         int i = start;
@@ -36,23 +36,19 @@ private:
                 {
                     if (height[i] >= hight)
                     {
-                        for (int k = 0; k < container.size(); k++)
-                        {
-                            ret += container[k];
-                        }
-                            
-                        container.clear();
+                        ret += tmp;
+                        tmp = 0;
                         hight = height[i];
                         hidx = i;
                     }
                     else
                     {
-                        container.push_back(hight - height[i]);
+                        tmp += (hight - height[i]);
                     }
                 }
                 else
                 {
-                    container.push_back(hight);
+                    tmp += hight;
                 }
             }
             if (start < end)
@@ -60,7 +56,7 @@ private:
             else
                 i--;
         }
-        if (container.size() > 0 && hidx >= 0)
+        if (tmp > 0 && hidx >= 0)
             return hidx;
         return -1;
     }
@@ -68,9 +64,9 @@ private:
 public:
     int trap1(vector<int>& height) {
         const int sz = height.size();
-        int ans = 0;
+        int ret = 0;
         if (sz < 2)
-            return ans;
+            return ret;
         int L = 0, R = sz - 1, maxL = height[L], maxR = height[R];
         while (L < R)
         {
@@ -78,7 +74,7 @@ public:
                 if (height[L] > maxL)
                     maxL = height[L];
                 else
-                    ans += maxL - height[L];
+                    ret += maxL - height[L];
                 L++;
             }
             else
@@ -86,11 +82,11 @@ public:
                 if (height[R] > maxR)
                     maxR = height[R];
                 else
-                    ans += maxR - height[R];
+                    ret += maxR - height[R];
                 R--;
             }
         }
-        return ans;
+        return ret;
     }
 
     int trap2(vector<int>& height) {
@@ -113,7 +109,7 @@ int main(void)
         v.push_back(t[i]);
     }
     Solution s;
-    int ret = s.trap(v);
+    int ret = s.trap1(v);
     cout << ret << endl;
     return 0;
 }
