@@ -96,19 +96,7 @@ public:
         int idx = travel(height, ret, 0, height.size() - 1);
         if (idx >= 0)
             travel(height, ret, height.size() - 1, idx);
-        return ret;int main(void)
-{
-    vector<int> v;
-    int t[] = {7, 1, 0, 2, 1, 4, 1, 3, 2, 1, 2, 1};
-    for (size_t i = 0; i < 12; i++)
-    {
-        v.push_back(t[i]);
-    }
-    Solution s;
-    int ret = s.trap(v);
-    cout << ret << endl;
-    return 0;
-}
+        return ret;
     }
 };
 
