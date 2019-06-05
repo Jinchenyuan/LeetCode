@@ -232,7 +232,7 @@ int main(void)
     newv.push_back(9);
     newv.push_back(13);
     Solution s;
-    vector<vector<int>> ret = s.insert(vv, newv);
+    vector<vector<int>> ret = s.insert1(vv, newv);
     print_vv(ret);
     return 0;
 }
