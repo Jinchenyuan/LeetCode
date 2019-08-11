@@ -88,14 +88,14 @@ public:
  * bool param_3 = obj->startsWith(prefix);
  */
 
-// int main(void)
-// {
-//     Trie *trie = new Trie();
-//     trie->insert("apple");
-//     cout << trie->search("apple") << endl; // returns true
-//     cout << trie->search("app") << endl;   // returns false
-//     cout << trie->startsWith("app") << endl; // returns true
-//     trie->insert("app");
-//     cout << trie->search("app") << endl; // returns true
-//     return 0;
-// }
+int main(void)
+{
+    Trie *trie = new Trie();
+    trie->insert("apple");
+    cout << trie->search("apple") << endl; // returns true
+    cout << trie->search("app") << endl;   // returns false
+    cout << trie->startsWith("app") << endl; // returns true
+    trie->insert("app");
+    cout << trie->search("app") << endl; // returns true
+    return 0;
+}
