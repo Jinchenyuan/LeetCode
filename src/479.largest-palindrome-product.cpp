@@ -6,76 +6,75 @@
 
 // @lc code=start
 //TODO 并没有解决问题
+/**
+ * 以下参考的他人的做法，纯数学技巧，本人数学欠佳，后续有时间再学习。
+ * 
+ * */
 #include <iostream>
-#include <deque>
+#include <string>
 using namespace std;
 
-const int STEP = 10;
+
 class Solution {
 public:
     int largestPalindrome(int n) {
-        if (n == 0)
-            return 0;
-        int max = 1;
-        for (size_t i = 0; i < n; i++)
+        long maxNum = pow(10, n) - 1;
+        long maxPal = 0;
+        long half = maxNum-1;
+        
+        if (1 == n)
         {
-            max *= 10;
+            return 9;
         }
-        int min = max / 10;
-        max = max - 1;
-        return findMaxPalindrome(max, min) % 1337;
-    }
-private:
-    long long  findMaxPalindrome(int max, int min)
-    {
-        if (max < min)
-            return 0;
-        long long maxPal = 0;
-        for (int i = max; i > (max - STEP); --i)
+        
+        if (0 == (n % 2))
         {
-            for (int j = i; j > (max - STEP); --j)
+            long peer = maxNum + 2 - pow(10, n / 2);
+            maxPal = peer * maxNum;
+            half = 0;
+        }
+        
+        while (half)
+        {
+            long full = genPalindrome(half);
+            long root = sqrt(full);
+            bool flag = false;
+            
+            for (long n1 = maxNum; root <= n1; --n1)
             {
-                long long tmp = (long long)j * (long long)i;
-                if (isPalindrome(tmp) && (tmp > maxPal))
+                if (full % n1)
                 {
-                    maxPal = tmp;
+                    continue;
                 }
+                
+                flag = true;
+                maxPal = full;
+                break;
             }
+            
+            if (flag)
+            {
+                break;
+            }    
+            half--;
         }
-        if (maxPal > 0)
-            return maxPal;
-        else
-            return findMaxPalindrome(max - STEP, min);
+        return maxPal % 1337;
     }
 
-    deque<long long> int2array(long long n)
+private:
+
+    long genPalindrome(long num)
     {
-        deque<long long> ret;
-        if (n == 0)
-        {
-            ret.push_back(0);
-            return ret;
-        }
-        long long p = 1;
-        while (n / p > 0)
-        {
-            ret.push_front((n % (p * 10)) / p);
-            p *= 10;
-        }
-        return ret;
-    }
-    bool isPalindrome(long long n)
-    {
-        deque<long long> vec = int2array(n);
-        int left = 0, right = vec.size() - 1;
-        while (left <= right)
-        {
-            if (vec[left++] != vec[right--])
-            {
-                return false;
-            }
-        }
-        return true;
+        stringstream ss;
+        string s = to_string(num);
+        long res;
+        
+        ss<<s;
+        reverse(s.begin(), s.end());
+        ss<<s;
+        
+        ss>>res;
+        return res;
     }
 };
 // @lc code=end
