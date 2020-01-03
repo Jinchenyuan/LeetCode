@@ -12,7 +12,37 @@ using namespace std;
 
 class Solution {
 public:
-    bool judgePoint24(vector<int>& nums) {
+
+    bool judgePoint24_1(vector<int>& nums) {
+        size_t size = nums.size();
+        if (size != 4)
+            return false;
+        int sum = 0;
+        for (size_t i = 0; i < size; i++)
+        {
+            sum += nums[i];
+        }
+        if (sum < 10)
+            return false;
+
+        sort(nums.begin(), nums.end());
+        do
+        {
+            double a = nums[0];
+            double b = nums[1];
+            double c = nums[2];
+            double d = nums[3];
+
+            if (valid(a, b, c, d))
+            {
+                return true;
+            }
+        }while (next_permutation(nums.begin(), nums.end()));
+
+        return false;
+    }
+
+    bool judgePoint24_2(vector<int>& nums) {
         size_t size = nums.size();
         if (size != 4)
             return false;
@@ -70,6 +100,71 @@ public:
     }
 
 private:
+
+    bool valid(double a, double b, double c, double d)
+    {
+        if (valid(a + b, c, d) ||
+            valid(a - b, c, d) ||
+            valid(a * b, c, d) ||
+            valid(a / b, c, d) ||
+
+            valid(a + b, c + d) ||
+            valid(a + b, c - d) ||
+            valid(a + b, c * d) ||
+            valid(a + b, c / d) ||
+
+            valid(a - b, c + d) ||
+            valid(a - b, c - d) ||
+            valid(a - b, c * d) ||
+            valid(a - b, c / d) ||
+
+            valid(a * b, c + d) ||
+            valid(a * b, c - d) ||
+            valid(a * b, c * d) ||
+            valid(a * b, c / d) ||
+
+            valid(a / b, c + d) ||
+            valid(a / b, c - d) ||
+            valid(a / b, c * d) ||
+            valid(a / b, c / d))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    bool valid(double a, double b, double c)
+    {
+        if (valid(a, b + c) ||
+            valid(a, b - c) ||
+            valid(a, b * c) ||
+            valid(a, b / c) ||
+
+            valid(b, a + c) ||
+            valid(b, a - c) ||
+            valid(b, c - a) ||
+            valid(b, a * c) ||
+            valid(b, a / c) ||
+            valid(b, c / a))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    bool valid(double a, double b)
+    {
+        if (abs(a + b - 24) < 0.001 || 
+            abs(a - b - 24) < 0.001 ||
+            abs(a * b - 24) < 0.001 ||
+            abs(a / b - 24) < 0.001)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
     vector<double> calculate2(double a, double b)
     {
         vector<double> v;
@@ -116,5 +211,7 @@ private:
         return v;
     }
 };
+
+//6÷(1-3÷4)=24
 // @lc code=end
 
