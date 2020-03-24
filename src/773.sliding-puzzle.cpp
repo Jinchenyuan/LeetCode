@@ -22,7 +22,7 @@ public:
         buildMap(_data);
     }
 
-    int slidingPuzzle(vector<vector<int>>& board) 
+    int slidingPuzzle(vector<vector<int>> &board) 
     {
         map<string, int>::iterator itd = _data.find(vec2str(board));
         if (itd != _data.end())
@@ -39,7 +39,7 @@ private:
         move(data, goal, 0);
     }
 
-    void move(map<string, int> &data, vector<vector<int>> board, int step)
+    void move(map<string, int> &data, vector<vector<int>> &board, int step)
     {
         //self
         map<string, int>::iterator itd = data.find(vec2str(board));
