@@ -13,43 +13,11 @@ using namespace std;
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        map<string, int> dp;
-        return getMax(dp, prices, 0, prices.size() - 1);
-    }
-
-private:
-    int getMax(map<string, int> &dp, vector<int> &prices, int begin, int end)
-    {
-        if (begin >= end)
-            return 0;
-        int ret = 0;
-        for (size_t i = 1; i <= end - begin; i++) {
-            int maxPre = getMaxByRange(dp, prices, begin, begin + i);
-            if (maxPre > 0) {
-                ret = max(ret, maxPre + getMax(dp, prices, begin + i + 1, end));
-            }
+        int profit = 0;
+        for(int i=1; i< prices.size(); ++i) {
+            profit += max(0, prices[i] - prices[i-1]);
         }
-        return ret;
-    }
-
-    int getMaxByRange(map<string, int> &dp, vector<int> &prices, int begin, int end)
-    {
-        string key = to_string(begin) + "#";
-        key += to_string(end);
-        map<string, int>::iterator ite = dp.find(key);
-        if (ite != dp.end()) {
-            return ite->second;
-        }
-
-        int minPrice = INT32_MAX, maxProfit = 0;
-        for (size_t i = begin; i <= end; i++)  {
-            minPrice = min(prices[i], minPrice);
-            maxProfit = max(prices[i] - minPrice, maxProfit);
-        }
-        
-        dp.insert(pair<string, int>(key, maxProfit));
-
-        return maxProfit;
+        return profit;
     }
 };
 
