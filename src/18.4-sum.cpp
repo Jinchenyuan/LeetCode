@@ -10,62 +10,79 @@
 #include <algorithm>
 using namespace std;
 
-void printVector(vector<int> v)
+void print_vv(vector<vector<int> > vv)
 {
-    cout << "[";
-    for (size_t k = 0; k < v.size(); k++)
+    cout << "[ ";
+    for (size_t i = 0; i < vv.size(); i++)
     {
-        if (k != v.size() - 1)
-            cout << v[k] << ", ";
+        cout << "[";
+        for (size_t k = 0; k < vv[i].size(); k++)
+        {
+            if (k != vv[i].size() - 1)
+                cout << vv[i][k] << ", ";
+            else
+                cout << vv[i][k];
+            
+        }
+        if (i != vv.size() - 1)
+            cout << "], ";
         else
-            cout << v[k];
-        
+           cout << "]";
     }
-    cout << "]" << endl;
+    cout << " ]" << endl;
 }
 
 class Solution {
 public:
     vector<vector<int>> fourSum(vector<int>& nums, int target) {
-        
         vector<vector<int>> ret;
-        vector<int> find;
-        findNext(nums, 0, ret, find, target);
-        sort(ret.begin(), ret.end());
-        ret.erase(unique(ret.begin(), ret.end()), ret.end());
-        return ret;
-    }
-
-private:
-    void findNext(vector<int> &nums, int idx, vector<vector<int>> &ret, vector<int> &find, int target) {
-        if (find.size() == 4)
-        {
-            int sum = 0;
-            for (size_t i = 0; i < find.size(); i++)
-            {
-                sum += find[i];
-            }
-            if (sum == target)
-            {
-                sort(find.begin(), find.end());
-                ret.push_back(find);
-            }
-
-            return;
+        if (nums.size() < 4) {
+            return ret;
         }
-        else
-        {
-            vector<int> newFind;
-            newFind.assign(find.begin(), find.end());
-
-            if (idx >= nums.size())
-            {
-                return;
+        sort(nums.begin(), nums.end());
+        int length = nums.size();
+        for (int i = 0; i < length - 3; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
             }
-            newFind.push_back(nums[idx]);
-            findNext(nums, idx + 1, ret, find, target);
-            findNext(nums, idx + 1, ret, newFind, target);
-        }   
+            if (nums[i] + nums[i + 1] + nums[i + 2] + nums[i + 3] > target) {
+                break;
+            }
+            if (nums[i] + nums[length - 3] + nums[length - 2] + nums[length - 1] < target) {
+                continue;
+            }
+            for (int j = i + 1; j < length - 2; j++) {
+                if (j > i + 1 && nums[j] == nums[j - 1]) {
+                    continue;
+                }
+                if (nums[i] + nums[j] + nums[j + 1] + nums[j + 2] > target) {
+                    break;
+                }
+                if (nums[i] + nums[j] + nums[length - 2] + nums[length - 1] < target) {
+                    continue;
+                }
+                int left = j + 1, right = length - 1;
+                while (left < right) {
+                    int sum = nums[i] + nums[j] + nums[left] + nums[right];
+                    if (sum == target) {
+                        ret.push_back({nums[i], nums[j], nums[left], nums[right]});
+                        while (left < right && nums[left] == nums[left + 1]) {
+                            left++;
+                        }
+                        left++;
+                        while (left < right && nums[right] == nums[right - 1]) {
+                            right--;
+                        }
+                        right--;
+                    } else if (sum < target) {
+                        left++;
+                    } else {
+                        right--;
+                    }
+                }
+            }
+        }
+        return ret;
     }
 };
 
@@ -73,7 +90,7 @@ int main(void)
 {
     vector<int> tv = { 1, 0, -1, 0, -2, 2 };
     Solution s;
-    s.fourSum(tv, 0);
+    print_vv(s.fourSum(tv, 0));
     return 0;
 }
 // @lc code=end
