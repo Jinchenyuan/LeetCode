@@ -13,50 +13,38 @@ class Solution {
 public:
 
     int divide(int dividend, int divisor) {
-        if (dividend == 0) return 0;
+        int s = (dividend > 0 && divisor > 0) || (dividend < 0 && divisor < 0) ? 1 : -1;
+        unsigned int dvd = dividend > 0 ? dividend : -dividend;
+        unsigned int dvs = divisor > 0 ? divisor : -divisor;
 
-        int s = 1;
-        if (dividend > 0 && divisor < 0 || dividend < 0 || divisor > 0) s = -1;
-
-        int dvd = abs(dividend);
-        int dvs = abs(divisor);
-
-        int mb = 1;
-
-        while ((dvd >> mb) > dvs)
-        {
-            mb++;
+        unsigned int bits[33];
+        unsigned int i=0;
+        unsigned int d = dvs;
+        bits[i] = d;
+        while( d <= dvd ){
+            bits[++i] = d = d << 1;
         }
-        mb--;
+        i--;
 
-        int ret = (1 << mb);
-        while (true)
-        {
-           int tmb = removeHighBit(dvd);
-           if (dvd > dvs)
-           {
-               ret += (1 << (mb - tmb));
-           }
-           else
-           {
-               break;
-           }
+        unsigned int ret = 0;
+        while(dvd >= dvs){
+            if (dvd >= bits[i]) {
+                dvd -= bits[i];
+                ret += (1 << i);
+            }else{
+                i--;
+            }
         }
 
-        return ret * s;
-    }
-
-private:
-
-    unsigned int removeHighBit(int &value)
-    {
-        int mb = 0;
-        while (INT32_MAX >> mb & value > value)
-        {
-            mb++;
+        if ( ret > INT32_MAX && s > 0 ) {
+            return INT32_MAX;
         }
-        value &= INT32_MAX >> mb;
-        return mb;
+
+        if (ret > INT32_MAX + 1 && s < 0) {
+            return INT32_MIN;
+        }
+
+        return (int)ret * s;
     }
 };
 // @lc code=end
