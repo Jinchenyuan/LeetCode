@@ -68,13 +68,13 @@ void max_heapify(int arr[], int start, int end)
     int son = dad * 2 + 1;
     // 若子节点指标在范围内才做比较
     while (son <= end)
-    {                                                  
+    {
         if (son + 1 <= end && arr[son] < arr[son + 1]) // 先比较两个子节点大小，选择最大的
             son++;
         if (arr[dad] > arr[son]) // 如果父节点大于子节点代表调整完毕，直接跳出函数
             return;
         else // 否则交换父子内容再继续子节点和孙节点比较
-        { 
+        {
             swap(&arr[dad], &arr[son]);
             dad = son;
             son = dad * 2 + 1;
@@ -96,7 +96,7 @@ void heap_sort(int arr[], int len)
     }
 }
 
-//希尔排序
+// 希尔排序
 void shell_sort(int arr[], int len)
 {
     int gap, i, j, temp;
@@ -107,16 +107,73 @@ void shell_sort(int arr[], int len)
             temp = arr[i];
             for (j = i - gap; j >= 0 && arr[j] > temp; j -= gap)
                 arr[j + gap] = arr[j];
-            arr[j + gap] = temp;            
+            arr[j + gap] = temp;
         }
     }
+}
+
+// 插入排序
+void insert_sort(int arr[], int len)
+{
+    if (arr == NULL || len <= 0)
+        return;
+
+    for (int i = 0; i < len; i++)
+    {
+        int tmp = arr[i], j;
+        for (j = i - 1; j >= 0; j--)
+        {
+            if (arr[j] > tmp)
+            {
+                arr[j + 1] = arr[j];
+            }
+            else
+            {
+                break;
+            }
+        }
+        arr[j + 1] = tmp;
+    }
+}
+
+// 快速排序
+void quick_sort(int arr[], int start, int end)
+{
+    if (start >= end)
+        return;
+    int midl = start, midr = start;
+    for (int i = start + 1; i < end; ++i)
+    {
+        if (arr[i] < arr[midr])
+        {
+            if (i == midr + 1)
+            {
+                swap(&arr[i], &arr[midl]);
+            }
+            else
+            {
+                swap(&arr[i], &arr[midr + 1]);
+                swap(&arr[midl], &arr[midr + 1]);
+            }
+            midl++;
+            midr++;
+        }
+        else if (arr[i] == arr[midr])
+        {
+            if (i > midr + 1)
+                swap(&arr[i], &arr[midr + 1]);
+            midr++;
+        }
+    }
+    quick_sort(arr, start, midl);
+    quick_sort(arr, midr + 1, end);
 }
 
 int main()
 {
     int arr[] = {3, 5, 3, 0, 8, 6, 1, 5, 8, 6, 2, 4, 9, 4, 7, 0, 1, 8, 9, 7, 3, 1, 2, 5, 9, 7, 4, 0, 2, 6};
     int len = (int)sizeof(arr) / sizeof(*arr);
-    shell_sort(arr, len);
+    quick_sort(arr, 0, len);
     int i;
     for (i = 0; i < len; i++)
         printf("%d ", arr[i]);
